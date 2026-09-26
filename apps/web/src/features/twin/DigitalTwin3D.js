@@ -4,7 +4,7 @@ import {
   createRooftopTexture, 
   createSoilStrataTexture, 
   createBlueprintFloorTexture 
-} from './utils/texture_gen.js';
+} from './texture_gen.js';
 
 export class DigitalTwin3D {
   constructor(containerId, onSelectLevel) {

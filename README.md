@@ -2,7 +2,7 @@
 
 ## 3D Cadastral and Vertical Property Mapping Platform
 
-BHAVANINFO is being evolved into a production-oriented platform for:
+BHAVANINFO is being evolved into a production-oriented prototype for:
 
 - 3D cadastral mapping
 - ULPIN and sub-ULPIN management
@@ -10,7 +10,7 @@ BHAVANINFO is being evolved into a production-oriented platform for:
 - GIS parcel visualization
 - 3D digital twins
 - Survey and evidence management
-- LiDAR and drone data processing
+- LiDAR and drone processing pipelines
 - AI-assisted building and floor extraction
 - Spatial validation
 - Property dossiers
@@ -19,33 +19,68 @@ BHAVANINFO is being evolved into a production-oriented platform for:
 
 ## Development Principle
 
-This repository is an enhancement of the original BHAVANINFO project.
+This repository enhances the original BHAVANINFO project.
 
-Existing functionality should be preserved and migrated incrementally.
+Existing functionality is preserved and migrated incrementally.
 
-Do not perform destructive rewrites without documenting the existing behavior first.
+The Three.js 3D renderer is a protected subsystem. Data sources may change behind the data-adapter boundary without changing renderer behavior.
 
-## Architecture
+## Official data foundation
 
-See:
+The current dashboard uses a dated snapshot of Government of India's Department of Land Resources DILRMP Punjab programme statistics.
 
-- `docs/ARCHITECTURE.md`
-- `apps/web`
-- `apps/api`
-- `packages`
-- `services`
-- `pipelines`
+Official source:
 
-## Data
+https://dilrmp.gov.in/dilrmpold/MapULPIN/MapDiditizaionDistrictList/3
 
-Data sources must be classified as:
+Punjab Land Records public portal:
+
+https://jamabandi.punjab.gov.in/
+
+Cadastral Map:
+
+https://jamabandi.punjab.gov.in/CadastralMap.aspx
+
+Online Services:
+
+https://jamabandi.punjab.gov.in/OnlineServices.aspx
+
+The official-data snapshot is programme-level information. It is not a substitute for an individual RoR, Jamabandi, mutation, cadastral map or ownership determination.
+
+See docs/OFFICIAL_DATA_SOURCES.md and data/manifests/ for provenance metadata.
+
+## Data classification
+
+Every dataset must be classified as one of:
 
 - authoritative
-- government/open data
+- authoritative_interface
+- credible_external
 - derived
-- synthetic/demo
+- synthetic_demo
+- uidai_test
 
-No synthetic or derived dataset should be represented as authoritative government data.
+Synthetic and derived data must never be represented as official government records.
+
+## Development commands
+
+Run the API:
+
+npm run dev:api
+
+Run the web app:
+
+npm run dev:web
+
+Validate the official-data snapshot and protected renderer:
+
+npm test
+
+npm run check:3d
+
+Build:
+
+npm run build
 
 ## Status
 

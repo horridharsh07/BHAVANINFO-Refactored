@@ -11,7 +11,8 @@
     "dev:web": "npm --workspace apps/web run dev",
     "dev:api": "npm --workspace apps/api run dev",
     "build": "npm run build --workspaces --if-present",
-    "test": "npm run test --workspaces"
+    "test": "npm run test --workspaces --if-present",
+    "check:3d": "node scripts/verify-3d-renderer.mjs"
   },
   "allowScripts": {
     "esbuild@0.28.2": true

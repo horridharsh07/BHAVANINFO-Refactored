@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Env files
+.env
+.env.local
+
+# IDEs
+.vscode/
+!.vscode/extensions.json

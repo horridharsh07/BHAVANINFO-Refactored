@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "government-statistics-only",
+      "rule": "Government-published programme statistics may be shown as authoritative snapshots when the exact source URL and retrieval timestamp are retained."
+    },
+    {
+      "id": "parcel-record-separation",
+      "rule": "Programme statistics are not a substitute for an individual Record of Rights, Jamabandi, mutation, cadastral map, title record, or ownership determination."
+    },
+    {
+      "id": "synthetic-labeling",
+      "rule": "Legacy BHAVANINFO parcel/building records remain synthetic_demo until their provenance and underlying source records are established."
+    },
+    {
+      "id": "derived-data",
+      "rule": "AI, reconstruction, floor segmentation, discrepancy detection and other processing outputs must identify the input dataset, processing version and model/pipeline."
+    },
+    {
+      "id": "identity-separation",
+      "rule": "Aadhaar authentication is an identity/authentication operation and does not establish land ownership, title or RoR rights."
+    }
+  ]
+}

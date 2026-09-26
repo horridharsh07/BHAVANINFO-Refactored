@@ -1,5 +1,6 @@
 import http from 'node:http';
 import { handleAuthRoute } from './routes/auth.routes.js';
+import { handleDataRoute } from './routes/data.routes.js';
 
 const PORT = Number(process.env.PORT || 4000);
 
@@ -21,6 +22,10 @@ const server = http.createServer(async (req, res) => {
       service: 'bhavaninfo-api',
       status: 'ok'
     }));
+    return;
+  }
+
+  if (await handleDataRoute(req, res)) {
     return;
   }
 

@@ -1,0 +1,63 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-09-26T13:28:00+05:30",
+  "datasets": [
+    {
+      "id": "dilrmp-punjab-status-2026-09-26",
+      "name": "DILRMP Punjab Map Digitization, Geo-Referenced and ULPIN Status",
+      "classification": "authoritative",
+      "data_scope": "Published programme statistics; not parcel-level RoR data",
+      "source_organization": "Government of India, Ministry of Rural Development, Department of Land Resources",
+      "source_url": "https://dilrmp.gov.in/dilrmpold/MapULPIN/MapDiditizaionDistrictList/3",
+      "retrieved_at": "2026-09-26T13:28:00+05:30",
+      "refresh_mode": "manual_snapshot",
+      "local_representation": "apps/api/src/data/official/dilrmp-punjab.snapshot.js"
+    },
+    {
+      "id": "punjab-land-records-public-portal",
+      "name": "Punjab Land Records",
+      "classification": "authoritative_interface",
+      "data_scope": "State land-record and cadastral-map search interface",
+      "source_organization": "Department of Revenue, Rehabilitation and Disaster Management, Government of Punjab",
+      "source_url": "https://jamabandi.punjab.gov.in/",
+      "cadastral_map_url": "https://jamabandi.punjab.gov.in/CadastralMap.aspx",
+      "online_services_url": "https://jamabandi.punjab.gov.in/OnlineServices.aspx",
+      "retrieved_at": "2026-09-26T13:28:00+05:30",
+      "refresh_mode": "live_portal",
+      "local_representation": null
+    },
+    {
+      "id": "legacy-punjab-parcels",
+      "name": "Legacy BHAVANINFO Punjab parcel records",
+      "classification": "synthetic_demo",
+      "record_count": 122,
+      "unique_ulpin_values": 32,
+      "unique_owner_values": 15,
+      "anomaly_records": 3,
+      "pending_records": 0,
+      "source_organization": "Legacy BHAVANINFO codebase",
+      "source_url": "https://github.com/horridharsh07/BHAVANINFO/tree/master/src/data",
+      "retrieved_at": "2026-09-26T13:28:00+05:30",
+      "refresh_mode": "frozen_reference",
+      "notes": "Contains generated parcel attributes and unsupported government/LiDAR/statutory claims. Never present as authoritative."
+    },
+    {
+      "id": "legacy-3d-building-footprints",
+      "name": "Legacy BHAVANINFO 3D building footprints",
+      "classification": "synthetic_demo",
+      "feature_count": 10300,
+      "unique_ulpin_values": 10300,
+      "unique_owner_values": 38,
+      "status_counts": {
+        "DIGITALIZED": 8136,
+        "PENDING_REGISTRATION": 1237,
+        "FLAGGED_VIOLATION": 927
+      },
+      "source_organization": "Legacy BHAVANINFO codebase",
+      "source_url": "https://github.com/horridharsh07/BHAVANINFO/tree/master",
+      "retrieved_at": "2026-09-26T13:28:00+05:30",
+      "refresh_mode": "frozen_reference",
+      "notes": "No original source/license metadata was found in the audited file. Do not label individual buildings as government verified."
+    }
+  ]
+}

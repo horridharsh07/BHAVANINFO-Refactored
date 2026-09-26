@@ -1,0 +1,16 @@
+{
+  "name": "@bhavaninfo/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.180.0",
+    "maplibre-gl": "^5.7.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  }
+}

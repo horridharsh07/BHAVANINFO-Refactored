@@ -310,9 +310,9 @@ body {
    ========================================================= */
 .gov-nav {
   background: #ffffff;
-  padding: 0 10px;
-  height: 38px;
-  min-height: 38px;
+  padding: 4px 20px;
+  height: 68px;
+  min-height: 68px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -321,7 +321,8 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
   z-index: 100;
-  position: relative;
+  position: sticky;
+  top: 0;
   max-width: 100vw;
   overflow-x: auto;
   scrollbar-width: none;
@@ -330,6 +331,22 @@ body {
 
 .gov-nav::-webkit-scrollbar {
   display: none;
+}
+
+@media (max-width: 1100px) {
+  .gov-nav {
+    height: auto;
+    min-height: 68px;
+    padding: 6px 12px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    overflow: visible;
+  }
+
+  .gov-nav-brand { order: 1; margin-right: auto; }
+  .gov-nav-right { order: 2; }
+  .nav-links { order: 3; }
+  .nav-search-box { order: 4; flex: 1 1 200px; max-width: none; }
 }
 
 .gov-nav-brand {
@@ -343,21 +360,37 @@ body {
 }
 
 .gov-nav-emblem {
-  font-size: 1.1rem;
-  line-height: 1;
+  width: 60px;
+  height: 60px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  flex: 0 0 60px;
+}
+
+.gov-nav-logo {
+  display: block;
+  width: 56px;
+  height: 56px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
 }
 
 .gov-nav-brand-text {
   display: flex;
-  align-items: center;
-  gap: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
 }
 
 .gov-nav-title {
   color: #00274d;
   font-weight: 800;
-  font-size: 0.88rem;
-  letter-spacing: 0.4px;
+  font-size: 1rem;
+  letter-spacing: 0;
   font-family: inherit;
 }
 
@@ -552,7 +585,10 @@ body {
 #view-twin.active {
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto;
+  min-height: 0;
   height: calc(100vh - 110px);
+  height: calc(100dvh - 110px);
   overflow: hidden;
 }
 
@@ -771,6 +807,31 @@ body {
   color: #cfe1f7;
 }
 
+.officer-profile-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 1fr);
+  align-items: center;
+  gap: 20px;
+}
+
+.officer-profile-banner .profile-info,
+.officer-profile-banner .profile-details { min-width: 0; }
+.officer-profile-banner .profile-info { align-items: flex-start; }
+.officer-profile-banner .profile-meta { flex-wrap: wrap; gap: 8px 12px; }
+.officer-profile-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  align-self: center;
+  min-width: 0;
+}
+.officer-profile-actions > button { min-width: 0; max-width: 100%; justify-content: center; text-align: center; white-space: normal; }
+
+@media (max-width: 900px) {
+  .officer-profile-banner { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .officer-profile-actions { grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); }
+}
+
 .verified-tag {
   background: rgba(19, 136, 8, 0.25);
   border: 1px solid #138808;
@@ -821,7 +882,7 @@ body {
 /* Property Cards Grid */
 .property-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr));
   gap: 20px;
   margin-bottom: 30px;
 }
@@ -1206,9 +1267,9 @@ body {
 
 /* Left HUD Details Panel */
 .twin-left-panel, .twin-dossier-sidebar {
-  width: 440px !important;
-  min-width: 380px !important;
-  max-width: 460px !important;
+  width: min(380px, 36vw) !important;
+  min-width: 320px !important;
+  max-width: 400px !important;
   flex-shrink: 0 !important;
   height: 100% !important;
   background: #ffffff !important;
@@ -1218,15 +1279,73 @@ body {
   flex-direction: column !important;
   z-index: 10;
   box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+  transition: width 220ms ease, min-width 220ms ease, max-width 220ms ease, opacity 180ms ease, transform 220ms ease;
+}
+
+.twin-workspace.dossier-collapsed .twin-left-panel {
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  border: 0;
+  opacity: 0;
+  overflow: hidden !important;
+  pointer-events: none;
 }
 
 .dossier-header {
   background: #f8fafc;
   color: #0f172a;
-  padding: 16px 20px;
+  padding: 18px 20px;
   position: relative;
   border-bottom: 1px solid #e2e8f0;
 }
+
+.dossier-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.workspace-panel-toggle,
+.workspace-panel-restore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #164b70;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.workspace-panel-toggle svg,
+.workspace-panel-restore svg,
+.btn-logout-pill svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
+
+.workspace-panel-toggle { position: static; }
+.workspace-panel-restore { position: absolute; top: 14px; left: 14px; z-index: 30; }
+.workspace-panel-restore[hidden] { display: none; }
+
+.dossier-header-actions .dossier-nav-back { position: static; }
 
 .dossier-header h3 {
   font-size: 1.1rem;
@@ -1263,16 +1382,16 @@ body {
 }
 
 .dossier-content {
-  padding: 20px;
+  padding: 24px;
   flex: 1;
 }
 
 .level-picker-tabs {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   overflow-x: auto;
   padding-bottom: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   border-bottom: 1px solid #e2e8f0;
 }
 
@@ -1308,9 +1427,9 @@ body {
 .dossier-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 14px;
-  margin-bottom: 16px;
+  border-radius: 6px;
+  padding: 18px;
+  margin-bottom: 18px;
 }
 
 .dossier-card h5 {
@@ -1574,16 +1693,85 @@ body {
     text-align: center;
     gap: 12px;
   }
-  .twin-workspace {
+  .gov-nav {
+    height: auto;
+    min-height: 54px;
+    padding: 6px 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    overflow: visible;
+  }
+  .gov-nav-brand { order: 1; margin-right: auto; }
+  .gov-nav-right { order: 2; }
+  .nav-links { order: 3; flex: 1 1 auto; }
+  .nav-search-box { order: 4; flex: 1 1 180px; max-width: none; }
+  .gov-nav-emblem { width: 42px; height: 42px; flex-basis: 42px; }
+  .gov-nav-logo { width: 38px; height: 38px; }
+  .twin-left-panel, .twin-dossier-sidebar {
+    position: absolute !important;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: min(380px, calc(100% - 20px)) !important;
+    min-width: 0 !important;
+    max-width: 400px !important;
+    height: auto !important;
+    max-height: calc(100% - 20px);
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  }
+  .twin-workspace.dossier-collapsed .twin-left-panel,
+  .twin-workspace.dossier-collapsed .twin-dossier-sidebar {
+    width: min(380px, calc(100% - 20px)) !important;
+    min-width: 0 !important;
+    max-width: 400px !important;
+    transform: translateX(calc(-100% - 12px));
+  }
+  .twin-workspace.dossier-collapsed .twin-canvas-container { width: 100%; height: 100% !important; }
+  .dossier-header { padding: 54px 16px 16px; }
+}
+
+@media (max-width: 680px) {
+  .nav-label { display: none; }
+  .nav-item { width: 36px; justify-content: center; padding-inline: 0; }
+  .nav-links { flex: 0 0 auto; }
+  .nav-search-box { flex: 1 1 100%; width: 100%; min-width: 0; }
+  .user-status-pill { display: none !important; }
+  .workspace-panel-toggle span,
+  .workspace-panel-restore span,
+  .btn-logout-pill span { display: none; }
+  .workspace-panel-toggle,
+  .workspace-panel-restore,
+  .btn-logout-pill { width: 40px; min-width: 40px; padding: 0; }
+}
+
+@media (max-width: 680px) {
+  #view-dashboard .dashboard-container { padding: 14px; }
+  #view-dashboard .citizen-profile-banner {
     flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 18px;
   }
-  .twin-left-panel {
-    width: 100%;
-    height: 40%;
-  }
-  .twin-canvas-container {
-    height: 60%;
-  }
+  #view-dashboard .profile-info { align-items: flex-start; gap: 12px; min-width: 0; }
+  #view-dashboard .profile-details { min-width: 0; overflow-wrap: anywhere; }
+  #view-dashboard .profile-details h2 { font-size: 1.15rem; }
+  #view-dashboard .profile-meta { flex-wrap: wrap; gap: 6px 12px; }
+  #view-dashboard .dashboard-register-actions,
+  #view-dashboard .dashboard-register-actions button,
+  #view-dashboard .dashboard-filter-actions,
+  #view-dashboard .citizen-search-input { width: 100% !important; }
+  #view-dashboard .dashboard-register-actions button { justify-content: center; }
+  #view-dashboard .action-bar { align-items: stretch; flex-direction: column; }
+  .property-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .officer-toolbar { align-items: stretch !important; padding: 10px !important; }
+  .officer-tabs { width: 100%; flex-wrap: nowrap !important; overflow-x: auto; padding-bottom: 4px; }
+  .officer-tab { flex: 0 0 auto; white-space: nowrap; }
+  .officer-tab-actions { width: 100%; flex-wrap: wrap; }
+  .officer-tab-actions input { flex: 1 1 160px; width: auto !important; min-width: 0; }
+  .officer-requests-container { padding: 12px !important; }
 }
 
 /* Cadastre & Mutation History Timeline Bar (Visible only in Map and 3D Twin views) */
@@ -6877,6 +7065,28 @@ body.is-printing-report .report-view-container {
   position: relative;
 }
 
+.officer-data-table {
+  min-width: 1120px;
+  table-layout: fixed;
+}
+
+.officer-data-table th,
+.officer-data-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+
+.officer-data-table th:nth-child(1), .officer-data-table td:nth-child(1) { width: 14%; }
+.officer-data-table th:nth-child(2), .officer-data-table td:nth-child(2) { width: 12%; }
+.officer-data-table th:nth-child(3), .officer-data-table td:nth-child(3) { width: 16%; }
+.officer-data-table th:nth-child(4), .officer-data-table td:nth-child(4) { width: 23%; }
+.officer-data-table th:nth-child(5), .officer-data-table td:nth-child(5) { width: 8%; }
+.officer-data-table th:nth-child(6), .officer-data-table td:nth-child(6) { width: 13%; }
+.officer-data-table th:nth-child(7), .officer-data-table td:nth-child(7) { width: 14%; }
+.officer-data-table td:first-child { white-space: nowrap; font-size: 0.74rem; }
+.officer-data-table td:nth-child(4) { overflow-wrap: anywhere; }
+
 .officer-status-badge {
   display: inline-block;
   padding: 3px 8px;
@@ -6888,6 +7098,11 @@ body.is-printing-report .report-view-container {
 .officer-status-badge.status-approved {
   background: #dcfce7;
   color: #166534;
+}
+
+.officer-status-badge.status-rejected {
+  background: #ffe4e6;
+  color: #9f1239;
 }
 
 .officer-status-badge.status-pending {
@@ -6922,6 +7137,12 @@ body.is-printing-report .report-view-container {
 .btn-officer-action.btn-approve {
   background: #16a34a;
   color: #ffffff;
+}
+
+.btn-officer-action.btn-reject {
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
 }
 
 .btn-officer-action.btn-flag {
@@ -8469,3 +8690,4 @@ body.is-printing-report .report-view-container {
   align-items: flex-start;
   gap: 1px;
 }
+

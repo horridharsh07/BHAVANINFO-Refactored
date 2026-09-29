@@ -22,7 +22,7 @@
  <link rel="stylesheet" href="vendor/maplibre-gl.css" />
  
  <!-- Government Theme CSS -->
- <link rel="stylesheet" href="src/styles/gov-theme.css?v=v20260911_v27_gigw3_compliance">
+ <link rel="stylesheet" href="src/styles/gov-theme.css?v=v20260929_officer_banner_06">
 </head>
 <body>
 
@@ -90,7 +90,7 @@
  <!-- Unified Sleek Government Navigation & Brand Bar (Strictly Hidden on Landing Page; Shown once redirected/logged in) -->
 	<nav class="gov-nav" style="display: none;">
 		<div class="gov-nav-brand" onclick="window.app && window.app.switchView('landing')" title="BHAVANINFO • Cadastre Home" style="cursor: pointer;">
-			<span class="gov-nav-emblem"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7v2h20V7L12 2zm-8 8v9h2v-9H4zm5 0v9h2v-9H9zm5 0v9h2v-9h-2zm5 0v9h2v-9h-2zM2 20v2h20v-2H2z"/></svg></span>
+			<span class="gov-nav-emblem"><img src="/assets/brand/bhavaninfo-logo.png" alt="BHAVANINFO logo" class="gov-nav-logo"></span>
 			<div class="gov-nav-brand-text">
 				<span class="gov-nav-title">BHAVANINFO</span>
 				 <span class="header-domain-pill">bhavaninfo.gov.in</span>
@@ -145,7 +145,7 @@
 				<span id="user-pill-name">Harpreet Singh</span>
 				<span class="user-ekyc-tag">Verified</span>
 			</div>
-			<button id="btn-logout" class="btn-logout-pill" style="display: none;" onclick="window.app.logoutUser()">Sign Out</button>
+			<button id="btn-logout" class="btn-logout-pill" style="display: none;" onclick="window.app.logoutUser()" title="Sign out" aria-label="Sign out"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H3M12 3h7v18h-7"/></svg><span>Sign out</span></button>
 		</div>
 	</nav>
 
@@ -233,11 +233,7 @@
 
 					<!-- Slide 1: MoRD DILRMP & Bhu-Aadhaar ULPIN -->
 					<div class="carousel-slide active">
-						<img src="assets/banners/mord-dilrmp-bhu-aadhaar.jpg" alt="Cadastral land records and Bhu-Aadhaar programme illustration" loading="eager">
-						<div class="hero-corrected-graphic-title" aria-label="Digital India Land Records Modernisation Programme, DILRMP and Bhu-Aadhaar ULPIN">
-							<strong>Digital India Land Records Modernisation Programme</strong>
-							<span>(DILRMP) &amp; Bhu-Aadhaar ULPIN</span>
-						</div>
+						<img src="assets/banners/dilrmp-bhu-aadhaar-hero.jpg" alt="Digital India land records modernisation, Bhu-Aadhaar ULPIN and cadastral GIS mapping" loading="eager">
 						<div class="carousel-overlay">
 							<div class="carousel-badge">Department of Land Resources &bull; Ministry of Rural Development</div>
 							<h2>Digital India Land Records Modernisation Programme (DILRMP)</h2>
@@ -642,7 +638,7 @@
  <p id="profile-address" style="font-size: 0.78rem; color: #cfe1f7; margin-top: 4px;">H.No. 412, Heritage Zone, Amritsar - 143001, Punjab</p>
  </div>
  </div>
- <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+ <div class="dashboard-register-actions" style="display: flex; gap: 8px; flex-wrap: wrap;">
  <button id="btn-open-register-modal" class="btn-secondary" style="background: var(--gov-saffron); border-color: #ff9933; color: #00274d; font-weight: 700;">
  + Register New Land / Building
  </button>
@@ -654,7 +650,7 @@
  <div class="section-title">
  <span>Properties Registered</span> Under Bhu-Aadhaar (ULPIN)
  </div>
- <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+ <div class="dashboard-filter-actions" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
  <input type="text" id="citizen-portfolio-search" class="citizen-search-input" placeholder="Search my portfolio by ULPIN, Khasra, Status..." oninput="window.app.filterCitizenPortfolio(this.value)" style="padding: 6px 12px; font-size: 0.8rem; border: 1.5px solid #cbd5e1; border-radius: 6px; width: 280px; outline: none; background: #ffffff;">
  <div style="display: flex; gap: 8px; font-size: 0.82rem; flex-wrap: wrap;">
  <div style="background: #ffffff; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--gov-border);">
@@ -714,7 +710,7 @@
 
  
  <!-- Officer Authority Banner -->
- <div class="citizen-profile-banner" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border-left-color: #ffd700;">
+ <div class="citizen-profile-banner officer-profile-banner" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); border-left-color: #ffd700;">
  <div class="profile-info">
  <div class="profile-avatar" style="background: #ffd700; color: #1e1b4b; border-color: #ffffff; overflow: hidden; display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; font-weight: 700; font-size: 1.1rem;">VS</div>
  <div class="profile-details">
@@ -726,7 +722,7 @@
  <p style="font-size: 0.78rem; color: #e0e7ff; margin-top: 4px;">District Administrative Complex, Court Road, Amritsar Cadastre Division</p>
  </div>
  </div>
- <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+ <div class="officer-profile-actions" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
  <button class="btn-secondary btn-officer-notif" onclick="const n=document.getElementById('top-gov-notification-bar'); if(n){n.style.display=(n.style.display==='none'||!n.style.display?'flex':'none'); if(n.style.display==='flex')n.scrollIntoView({behavior:'smooth'});}" style="position: relative; background: #dc2626; border-color: #b91c1c; color: #ffffff; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 6px; cursor: pointer;">
 					<span style="position: relative; display: inline-flex; align-items: center; justify-content: center;">
 						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
@@ -773,14 +769,14 @@
  </div>
 
  <!-- Officer Tabs -->
- <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 0; background: #f8fafc; padding: 8px 12px; border-radius: 8px 8px 0 0; border: 1px solid #e2e8f0; border-bottom: none;">
-				<div style="display: flex; gap: 6px; flex-wrap: wrap;">
+ <div class="officer-toolbar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 0; background: #f8fafc; padding: 8px 12px; border-radius: 8px 8px 0 0; border: 1px solid #e2e8f0; border-bottom: none;">
+				<div class="officer-tabs" style="display: flex; gap: 6px; flex-wrap: wrap;">
 					<button type="button" class="officer-tab active" data-tab="requests" onclick="window.app.switchOfficerTab('requests')">All Requests &amp; Parcels (<span id="officer-tab-count-all">10,300</span>)</button>
 					<button type="button" class="officer-tab" data-tab="approvals" onclick="window.app.switchOfficerTab('approvals')">Approvals Queue (<span id="officer-tab-count-approvals">0</span>)</button>
 					<button type="button" class="officer-tab" data-tab="violations" onclick="window.app.switchOfficerTab('violations')">Active Violations (<span id="officer-tab-count-violations">0</span>)</button>
 					<button type="button" class="officer-tab" data-tab="verified" onclick="window.app.switchOfficerTab('verified')">Approved List (<span id="officer-tab-count-verified">0</span>)</button>
 				</div>
-				<div style="display: flex; gap: 8px; align-items: center;">
+				<div class="officer-tab-actions" style="display: flex; gap: 8px; align-items: center;">
 					<input type="text" id="officer-search-input" placeholder="Filter by ULPIN, Owner, Survey No..." oninput="window.app.filterOfficerTable(this.value)" style="padding: 6px 12px; font-size: 0.8rem; border: 1.5px solid #cbd5e1; border-radius: 6px; width: 260px; outline: none; background: #ffffff;">
 					<button type="button" class="btn-card" style="padding: 6px 12px; font-size: 0.78rem; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; cursor: pointer; color: #334155; font-weight: 600;" onclick="window.app.loadOfficerRequests()">Refresh</button>
 				</div>
@@ -790,10 +786,9 @@
  <div id="officer-requests-container" class="officer-requests-container" style="background: #ffffff; border-radius: 0 0 8px 8px; border: 1px solid #e2e8f0; padding: 18px; overflow-x: auto;">
  <h4 style="color: var(--gov-blue-dark, #00274d); margin-bottom: 12px; font-size: 0.95rem; display: flex; justify-content: space-between; align-items: center;">
  <span id="officer-table-heading">Complete Cadastral Parcel Register — Officer Authority View</span>
- <span style="font-size: 0.75rem; color: #64748b; font-weight: normal;">Auto-refreshed from SQLite Backend</span>
  </h4>
  
- <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
+ <table class="officer-data-table" aria-label="Officer cadastral parcel register" style="width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: left;">
  <thead>
  <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; color: #475569;">
  <th style="padding: 10px;">ULPIN</th>
@@ -894,9 +889,12 @@
  <div class="twin-workspace">
  
  <!-- LEFT PANEL: LAND REGISTRY DOSSIER & SUB-ULPIN HUD -->
- <aside class="twin-left-panel">
+ <aside id="twin-dossier" class="twin-left-panel">
  <div class="dossier-header">
+ <div class="dossier-header-actions">
+ <button type="button" id="btn-toggle-twin-dossier" class="workspace-panel-toggle" aria-controls="twin-dossier" aria-expanded="true" title="Hide property details" aria-label="Hide property details"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18m9-12-3 3 3 3"/></svg><span>Hide details</span></button>
  <button id="btn-back-to-map" class="dossier-nav-back">&larr; Back to Map</button>
+ </div>
  <h3>BHAVANINFO Digital Twin Dossier</h3>
  <div id="dossier-ulpin-val" class="dossier-ulpin">BCN501B1NA2CH0</div>
  <div style="font-size: 0.75rem; color: #cfe1f7; margin-top: 2px;">ISO 19152 (LADM 3D) Verified Record</div>
@@ -1114,6 +1112,7 @@
 
  <!-- RIGHT CANVAS: THREE.JS 3D VIEWPORT -->
  <div class="twin-canvas-container">
+ <button type="button" id="btn-show-twin-dossier" class="workspace-panel-restore" aria-controls="twin-dossier" title="Show property details" aria-label="Show property details" hidden><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18m3-9 3-3m-3 3 3 3"/></svg><span>Show details</span></button>
  <div id="twin-viewport"></div>
 
  <!-- PENDING DRONE SLAM SURVEY OVERLAY (Shown when building survey is pending) -->
@@ -2399,7 +2398,7 @@
  <span style="font-size: 1.5rem;"></span>
  <div>
  <div style="font-weight: 700; font-size: 0.92rem; color: #fff;">Bhu-Samvaad AI Legal Assistant</div>
- <div style="font-size: 0.7rem; color: #7dd3fc;">Bhu-Cadastre Hybrid RAG &bull; SVAMITVA 2.0 / DILRMP Statutory Intelligence</div>
+ <div style="font-size: 0.7rem; color: #7dd3fc;">NVIDIA Nemotron 550B &bull; DILRMP / DILRMP Statutory RAG</div>
  </div>
  </div>
  <div style="display: flex; align-items: center; gap: 6px;">
@@ -2410,9 +2409,7 @@
  <div class="ai-quick-prompts">
  <button class="ai-prompt-pill" data-prompt="What are the rules for unauthorized vertical storeys under Section 187?">Section 187 Demolition</button>
  <button class="ai-prompt-pill" data-prompt="Explain Jamabandi RoR presumption of truth under Punjab Land Revenue Act Sec 31.">Jamabandi Sec 31</button>
- <button class="ai-prompt-pill" data-prompt="What is the status of parcel PB020011014121?">Audit Parcel PB020011014121</button>
  <button class="ai-prompt-pill" data-prompt="How does ISO 19152 3D Cadastre assign Sub-ULPINs to each floor?">3D Sub-ULPIN</button>
- <button class="ai-prompt-pill" data-prompt="What utilities are located at -30ft depth under my building?">-30ft Utilities</button>
  <button class="ai-prompt-pill" data-prompt="How to schedule autonomous drone LiDAR survey for my property?">Drone Survey Fee</button>
  </div>
 
@@ -2463,6 +2460,6 @@
 		}
 	};
 	</script>
-	<script type="module" src="src/app.js?v=v20260926_clean_nav_and_scan_1790422502546"></script>
+	<script type="module" src="src/app.js?v=v20260929_officer_decisions_05"></script>
 </body>
 </html>

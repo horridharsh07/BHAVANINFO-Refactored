@@ -1298,37 +1298,53 @@ function handleApiRequest(req, res, parsedUrl) {
     return;
   }
 
-    // API 3B: Officer Approve Parcel
-  if (pathname === '/api/parcels/approve' && method === 'POST') {
+  // API 3B: Officer decision applies to one parcel identified by its primary ULPIN.
+  const parcelDecisionMatch = pathname.match(/^\/api\/parcels\/(approve|reject)$/);
+  if (parcelDecisionMatch && method === 'POST') {
     let body = '';
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
       try {
         const data = JSON.parse(body || '{}');
-        const ulpin = data.ulpin;
+        const ulpin = String(data.ulpin || '').trim();
         if (!ulpin) {
           res.writeHead(400, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ error: 'ULPIN is required' }));
           return;
         }
 
-        const cleanUlpin = String(ulpin).trim();
-        db.prepare(`
-          UPDATE parcels 
-          SET status = 'PLAN_APPROVED', has_anomaly = 0, anomaly_desc = NULL 
-          WHERE ulpin = ? OR id = ? OR UPPER(ulpin) = UPPER(?) OR UPPER(id) = UPPER(?)
-        `).run(cleanUlpin, cleanUlpin, cleanUlpin, cleanUlpin);
+        const action = parcelDecisionMatch[1];
+        const status = action === 'approve' ? 'PLAN_APPROVED' : 'REJECTED';
+        const updateResult = action === 'approve'
+          ? db.prepare(`
+              UPDATE parcels
+              SET status = 'PLAN_APPROVED', has_anomaly = 0, anomaly_desc = NULL
+              WHERE ulpin = ?
+            `).run(ulpin)
+          : db.prepare(`
+              UPDATE parcels
+              SET status = 'REJECTED'
+              WHERE ulpin = ?
+            `).run(ulpin);
 
-        try {
-          db.prepare(`
-            UPDATE sub_ulpins 
-            SET is_flagged = 0 
-            WHERE parcel_ulpin = ? OR UPPER(parcel_ulpin) = UPPER(?)
-          `).run(cleanUlpin, cleanUlpin);
-        } catch(e) {}
+        if (Number(updateResult.changes) !== 1) {
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'No parcel found for the supplied ULPIN' }));
+          return;
+        }
+
+        if (action === 'approve') {
+          try {
+            db.prepare(`
+              UPDATE sub_ulpins
+              SET is_flagged = 0
+              WHERE parcel_ulpin = ?
+            `).run(ulpin);
+          } catch (e) {}
+        }
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true, message: `Parcel ${ulpin} approved and marked as VERIFIED`, ulpin }));
+        res.end(JSON.stringify({ success: true, action, status, ulpin }));
       } catch (err) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: err.message }));

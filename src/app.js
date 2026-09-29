@@ -52,6 +52,8 @@ class BhuAadhaarApp {
  }
  } catch (e) {}
  this.setupAccessibility();
+	this.setupTwinDossierControls();
+	window.addEventListener('resize', () => this.resizeWorkspaceView());
  this.setupHeaderCollapseToggle();
  this.setupAuthHandlers();
  this.setupNavHandlers();
@@ -181,6 +183,37 @@ class BhuAadhaarApp {
  });
  }
  }
+
+	setupTwinDossierControls() {
+		const workspace = document.querySelector('.twin-workspace');
+		const dossier = document.getElementById('twin-dossier');
+		const collapseButton = document.getElementById('btn-toggle-twin-dossier');
+		const restoreButton = document.getElementById('btn-show-twin-dossier');
+		const setCollapsed = (collapsed) => {
+			if (!workspace || !dossier) return;
+			workspace.classList.toggle('dossier-collapsed', collapsed);
+			dossier.inert = collapsed;
+			dossier.setAttribute('aria-hidden', String(collapsed));
+			if (collapseButton) collapseButton.setAttribute('aria-expanded', String(!collapsed));
+			if (restoreButton) restoreButton.hidden = !collapsed;
+			requestAnimationFrame(() => {
+				if (collapsed && restoreButton) restoreButton.focus();
+				if (!collapsed && collapseButton) collapseButton.focus();
+				if (this.twin3d) this.twin3d.onResize();
+			});
+		};
+		if (collapseButton) collapseButton.addEventListener('click', () => setCollapsed(true));
+		if (restoreButton) restoreButton.addEventListener('click', () => setCollapsed(false));
+	}
+
+	resizeWorkspaceView() {
+		const activeView = document.querySelector('#view-map.active, #view-twin.active');
+		if (!activeView) return;
+		const top = Math.max(0, activeView.getBoundingClientRect().top);
+		activeView.style.height = `${Math.max(300, window.innerHeight - top)}px`;
+		if (activeView.id === 'view-map' && this.map2d) this.map2d.invalidateSize();
+		if (activeView.id === 'view-twin' && this.twin3d) this.twin3d.onResize();
+	}
 
  setupHeaderCollapseToggle() {
  // Permanently disabled: Header remains fixed and stable at top, never auto-collapses or hides
@@ -898,7 +931,7 @@ class BhuAadhaarApp {
  }
 
  const btnLogout = document.getElementById('btn-logout');
- if (btnLogout) btnLogout.style.display = 'inline-block';
+ if (btnLogout) btnLogout.style.display = 'inline-flex';
 
  		// Role-Based Navigation Bar Customization:
 		const isOfficer = (this.currentUser && this.currentUser.role === 'AUTHORITY_HEAD');
@@ -2442,6 +2475,7 @@ class BhuAadhaarApp {
 
  // Scroll to top when switching views
  window.scrollTo(0, 0);
+ this.resizeWorkspaceView();
  }
 
  
@@ -5321,9 +5355,11 @@ startManualScanFromModal() {
 		parcels.slice(0, 100).forEach(parcel => {
 			const row = document.createElement('tr');
 			const isViolation = parcel.has_anomaly === true || parcel.has_anomaly === 1;
-			const isVerified = parcel.status === 'VERIFIED' || parcel.status === 'PLAN_APPROVED' || parcel.status === 'APPROVED';
-			const statusClass = isViolation ? 'status-flagged' : (isVerified ? 'status-approved' : 'status-pending');
-			const statusLabel = isViolation ? '24h Notice (Flagged)' : (isVerified ? (parcel.justApproved ? 'Approved Just Now' : 'Verified & Approved') : 'Pending Review');
+			const normalizedStatus = String(parcel.status || '').toUpperCase();
+			const isVerified = normalizedStatus === 'VERIFIED' || normalizedStatus === 'PLAN_APPROVED' || normalizedStatus === 'APPROVED';
+			const isRejected = normalizedStatus === 'REJECTED' || normalizedStatus === 'DECLINED';
+			const statusClass = isRejected ? 'status-rejected' : (isViolation ? 'status-flagged' : (isVerified ? 'status-approved' : 'status-pending'));
+			const statusLabel = isRejected ? 'Rejected' : (isViolation ? '24h Notice (Flagged)' : (isVerified ? (parcel.justApproved ? 'Approved Just Now' : 'Verified & Approved') : 'Pending Review'));
 
 			if (parcel.justApproved) {
 				row.style.background = '#f0fdf4';
@@ -5340,8 +5376,8 @@ startManualScanFromModal() {
 				<td>
 					<div style="display: flex; gap: 4px; flex-wrap: wrap;">
 						<button class="btn-officer-action btn-inspect" onclick="window.app.inspectParcel('${parcel.ulpin}')">Inspect</button>
-						${!isVerified ? `<button class="btn-officer-action btn-approve" onclick="window.app.approveParcel('${parcel.ulpin}')">Approve</button>` : `<span style="font-size: 0.75rem; color: #16a34a; font-weight: 700; background: #dcfce7; padding: 3px 8px; border-radius: 4px; border: 1px solid #bbf7d0;">Approved</span>`}
-						${!isViolation && !isVerified ? `<button class="btn-officer-action btn-flag" onclick="window.app.flagParcel('${parcel.ulpin}')">Flag</button>` : ''}
+						${isVerified ? `<span class="officer-status-badge status-approved">Approved</span>` : (isRejected ? `<span class="officer-status-badge status-rejected">Rejected</span>` : `<button class="btn-officer-action btn-approve" onclick="window.app.approveParcel('${parcel.ulpin}')">Approve</button><button class="btn-officer-action btn-reject" onclick="window.app.rejectParcel('${parcel.ulpin}')">Reject</button>`)}
+						${!isViolation && !isVerified && !isRejected ? `<button class="btn-officer-action btn-flag" onclick="window.app.flagParcel('${parcel.ulpin}')">Flag</button>` : ''}
 					</div>
 				</td>
 			`;
@@ -5355,18 +5391,31 @@ startManualScanFromModal() {
 		if (searchInput) searchInput.value = '';
 		this.officerSearchQuery = '';
 
-		// Find parcel in memory
-		let parcel = (this.officerParcels || []).find(p => p.ulpin === ulpin || p.legacy_ulpin === ulpin || String(p.ulpin).trim().toUpperCase() === String(ulpin).trim().toUpperCase());
-		const mainP = (this.allParcels || []).find(p => p.ulpin === ulpin || p.legacy_ulpin === ulpin || String(p.ulpin).trim().toUpperCase() === String(ulpin).trim().toUpperCase());
-
-		if (!parcel && mainP) {
-			parcel = mainP;
-			if (!this.officerParcels) this.officerParcels = [];
-			this.officerParcels.unshift(parcel);
+		const cleanUlpin = String(ulpin || '').trim();
+		const normalizedUlpin = cleanUlpin.toUpperCase();
+		const matchesUlpin = parcel => String(parcel.ulpin || '').trim().toUpperCase() === normalizedUlpin;
+		const parcel = (this.officerParcels || []).find(matchesUlpin);
+		const mainP = (this.allParcels || []).find(matchesUlpin);
+		if (!parcel) {
+			this.showToast(`Could not find parcel ${cleanUlpin} in the officer register.`, 4000);
+			return;
 		}
 
-		const ownerName = parcel ? parcel.owner : 'Property Owner';
-		const surveyNo = parcel ? parcel.survey_no : ulpin;
+		const ownerName = parcel.owner || 'Property Owner';
+		const surveyNo = parcel.survey_no || cleanUlpin;
+		try {
+			const response = await fetch('/api/parcels/approve', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ ulpin: cleanUlpin })
+			});
+			const result = await response.json();
+			if (!response.ok || !result.success) throw new Error(result.error || 'Approval was not saved.');
+		} catch (error) {
+			this.showToast(`Could not approve ${cleanUlpin}: ${error.message}`, 5000);
+			await this.loadOfficerRequests();
+			return;
+		}
 
 		// 1. Update in-memory parcel status
 		if (parcel) {
@@ -5390,18 +5439,7 @@ startManualScanFromModal() {
 			this.officerParcels = [parcel, ...this.officerParcels.filter(p => p !== parcel && p.ulpin !== ulpin)];
 		}
 
-		// 2. Call backend API to persist in SQLite
-		try {
-			await fetch('/api/parcels/approve', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ ulpin })
-			});
-		} catch(e) {
-			console.warn('Backend approve call:', e);
-		}
-
-		// 3. Recalculate KPI and tab counters
+		// Recalculate KPI and tab counters
 		const pendingParcels = (this.officerParcels || []).filter(p => p.status === 'PENDING_SURVEY' || p.status === 'PROVISIONAL' || p.status === 'PENDING_REGISTRATION' || p.status === 'PENDING' || p.status === 'PENDING_REVIEW' || !p.status);
 		const approvedParcels = (this.officerParcels || []).filter(p => p.status === 'VERIFIED' || p.status === 'PLAN_APPROVED' || p.status === 'APPROVED');
 		const flaggedParcels = (this.officerParcels || []).filter(p => p.has_anomaly === true || p.has_anomaly === 1);
@@ -5433,6 +5471,49 @@ startManualScanFromModal() {
 		if (reqContainer) {
 			reqContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 		}
+	}
+
+	async rejectParcel(ulpin) {
+		const cleanUlpin = String(ulpin || '').trim();
+		const normalizedUlpin = cleanUlpin.toUpperCase();
+		const matchesUlpin = parcel => String(parcel.ulpin || '').trim().toUpperCase() === normalizedUlpin;
+		const parcel = (this.officerParcels || []).find(matchesUlpin);
+		if (!parcel) {
+			this.showToast(`Could not find parcel ${cleanUlpin} in the officer register.`, 4000);
+			return;
+		}
+
+		try {
+			const response = await fetch('/api/parcels/reject', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ ulpin: cleanUlpin })
+			});
+			const result = await response.json();
+			if (!response.ok || !result.success) throw new Error(result.error || 'Rejection was not saved.');
+		} catch (error) {
+			this.showToast(`Could not reject ${cleanUlpin}: ${error.message}`, 5000);
+			await this.loadOfficerRequests();
+			return;
+		}
+
+		const mainP = (this.allParcels || []).find(matchesUlpin);
+		parcel.status = 'REJECTED';
+		parcel.rejected_at = Date.now();
+		if (mainP) {
+			mainP.status = 'REJECTED';
+			mainP.rejected_at = parcel.rejected_at;
+		}
+
+		const surveyNo = parcel.survey_no || cleanUlpin;
+		const ownerName = parcel.owner || 'Property Owner';
+		const searchInput = document.getElementById('officer-search-input');
+		if (searchInput) searchInput.value = '';
+		this.officerSearchQuery = '';
+		this.currentOfficerTab = 'requests';
+		await this.loadOfficerRequests();
+		this.switchOfficerTab('requests');
+		this.showToast(`Application ${surveyNo} (${ownerName}) rejected.`, 4000);
 	}
 
 	async approveParcelFromDossier() {

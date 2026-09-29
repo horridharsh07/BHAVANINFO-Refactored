@@ -1,6 +1,6 @@
 // Main Application Controller: Auth, Navigation, Dossier HUD, and Drone Simulation
 import { PUNJAB_PARCELS, CURRENT_USER } from './data/punjab_parcels.js';
-import { CadastreMap2D } from './map2d.js?v=20260911_v7_vendors_restored';
+import { CadastreMap2D } from './map2d.js?v=20260929_cancel_popup_11';
 import { DigitalTwin3D } from './twin3d.js?v=20260911_v7_vendors_restored';
 import { TutorialTourGuide } from './utils/tutorial_tour.js?v=20260911_v1';
 import { DistrictReportManager } from './utils/district_report.js?v=20260911_v26_pdf';
@@ -2067,6 +2067,13 @@ class BhuAadhaarApp {
  const input = document.getElementById('ai-chat-input');
  if (drawer) {
  drawer.style.display = 'flex';
+		const sideButton = document.getElementById('side-menu-ai-btn');
+		const assistantButton = document.getElementById('btn-open-ai-assistant');
+		if (sideButton) sideButton.setAttribute('aria-expanded', 'true');
+		if (assistantButton) {
+			assistantButton.classList.remove('is-tucked');
+			assistantButton.classList.add('is-open');
+		}
  if (input) input.focus();
  }
  }
@@ -2093,10 +2100,11 @@ class BhuAadhaarApp {
  btnOpen.classList.remove('is-open');
  }
  }
+		if (btnSide) btnSide.setAttribute('aria-expanded', String(!isVisible));
  };
 
  if (btnOpen) btnOpen.addEventListener('click', toggleAssistant);
- if (btnSide) btnSide.addEventListener('click', (e) => { e.preventDefault(); toggleAssistant(); });
+	if (btnSide) btnSide.addEventListener('click', (e) => { e.preventDefault(); this.openAiAssistant(); });
 
  const btnTuck = document.getElementById('btn-tuck-ai-assistant');
  if (btnTuck && btnOpen) {
@@ -2111,6 +2119,7 @@ class BhuAadhaarApp {
  if (btnClose && drawer) {
  btnClose.addEventListener('click', () => {
  drawer.style.display = 'none';
+			if (btnSide) btnSide.setAttribute('aria-expanded', 'false');
  if (btnOpen) btnOpen.classList.remove('is-open');
  });
  }
@@ -2118,6 +2127,7 @@ class BhuAadhaarApp {
  document.addEventListener('keydown', (e) => {
  if (e.key === 'Escape' && drawer && drawer.style.display === 'flex') {
  drawer.style.display = 'none';
+			if (btnSide) btnSide.setAttribute('aria-expanded', 'false');
  if (btnOpen) btnOpen.classList.remove('is-open');
  }
  });

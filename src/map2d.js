@@ -729,6 +729,10 @@ export class CadastreMap2D {
  return;
  }
  if (e.features && e.features.length > 0) {
+ if (this.isTouchInput(e)) {
+ this.hoveredFeature = e.features[0];
+ return;
+ }
  this.handleBuildingClick(e.features[0]);
  }
  });
@@ -750,10 +754,28 @@ export class CadastreMap2D {
  return;
  }
 
+ if (this.isTouchInput(e)) {
+ const bbox = [
+ [e.point.x - 14, e.point.y - 14],
+ [e.point.x + 14, e.point.y + 14]
+ ];
+ const features = this.map.queryRenderedFeatures(bbox, { layers: ['3d-buildings-layer'] });
+ if (features && features.length > 0) {
+ const feature = features[0];
+ this.hoveredFeature = feature;
+ this.showHoverHud(feature.properties || {}, e, feature);
+ } else {
+ this.hoveredFeature = null;
+ this.hideHoverHud();
+ }
+ return;
+ }
+
  if (this.hoveredFeature) {
  this.handleBuildingClick(this.hoveredFeature);
  return;
  }
+
 
  const bbox = [
  [e.point.x - 14, e.point.y - 14],
@@ -764,6 +786,13 @@ export class CadastreMap2D {
  this.handleBuildingClick(features[0]);
  }
  });
+ }
+
+ isTouchInput(e) {
+ const originalEvent = e && e.originalEvent;
+ return Boolean(
+ originalEvent && (originalEvent.pointerType === 'touch' || String(originalEvent.type || '').startsWith('touch'))
+ ) || (typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches);
  }
 
  handleBuildingClick(feature) {
@@ -877,7 +906,7 @@ export class CadastreMap2D {
  };
 
  this.hoverHud.innerHTML = `
- <div class="hud-header">Department of Land Resources &bull; Bhu-Aadhaar</div>
+ <div class="hud-header"><span>Department of Land Resources &bull; Bhu-Aadhaar</span><button type="button" class="hud-close-btn" aria-label="Close parcel details" title="Close parcel details"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
  <div class="hud-ulpin">${props.ulpin || 'BCN501B1NA2CH0'}</div>
 
  <!-- BhuNaksha Live Sync Banner -->
@@ -909,32 +938,40 @@ export class CadastreMap2D {
  <div class="hud-hint"> Click Building to Open 3D Inspector &amp; BhuNaksha RoR &rarr;</div>
  `;
 
+ const closeButton = this.hoverHud.querySelector('.hud-close-btn');
+ if (closeButton) closeButton.addEventListener('click', (event) => {
+ event.stopPropagation();
+ this.hoveredFeature = null;
+ this.hideHoverHud();
+ });
+
  // Position directly beside cursor using native container-relative coordinates
+ const touchLayout = this.isTouchInput(e);
+ this.hoverHud.classList.toggle('touch-layout', touchLayout);
+ const legend = document.getElementById('map-cadastre-legend');
+ if (touchLayout && legend && getComputedStyle(legend).display !== 'none') {
+ this.hoverHud.style.setProperty('--hud-bottom-gap', `${legend.offsetHeight + 36}px`);
+ } else {
+ this.hoverHud.style.removeProperty('--hud-bottom-gap');
+ }
+
  const container = this.map.getContainer();
  const mapWidth = container.clientWidth;
  const mapHeight = container.clientHeight;
 
- const hudWidth = 330;
- const hudHeight = 260;
-
- let posX = e.point.x + 18;
- let posY = e.point.y - 140;
-
- // Strict clamping within map viewport bounds
- if (posX + hudWidth > mapWidth - 15) {
- posX = e.point.x - hudWidth - 18;
- }
- if (posY < 15) {
- posY = e.point.y + 20;
- }
- if (posY + hudHeight > mapHeight - 15) {
- posY = mapHeight - hudHeight - 15;
- }
-
- posX = Math.max(15, posX);
- posY = Math.max(15, posY);
 
  this.hoverHud.style.display = 'block';
+ const hudWidth = this.hoverHud.offsetWidth;
+ const hudHeight = this.hoverHud.offsetHeight;
+ const edgePadding = 12;
+ let posX = e.point.x + 18;
+ let posY = e.point.y - Math.round(hudHeight / 2);
+
+ if (posX + hudWidth > mapWidth - edgePadding) {
+ posX = e.point.x - hudWidth - 18;
+ }
+ posX = Math.max(edgePadding, Math.min(posX, mapWidth - hudWidth - edgePadding));
+ posY = Math.max(edgePadding, Math.min(posY, mapHeight - hudHeight - edgePadding));
  this.hoverHud.style.left = `${posX}px`;
  this.hoverHud.style.top = `${posY}px`;
  }
@@ -942,6 +979,8 @@ export class CadastreMap2D {
  hideHoverHud() {
  if (this.hoverHud) {
  this.hoverHud.style.display = 'none';
+ this.hoverHud.classList.remove('touch-layout');
+ this.hoverHud.style.removeProperty('--hud-bottom-gap');
  }
  }
 

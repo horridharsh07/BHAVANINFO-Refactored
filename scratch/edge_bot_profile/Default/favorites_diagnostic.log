@@ -1,0 +1,42 @@
+2026-09-26 12:51:37.414: [INFO] CurrentProfilePath: D:\BHAVANINFO\scratch\edge_bot_profile\Default
+2026-09-26 12:51:37.414: [INFO] Profiles total count: 1
+2026-09-26 12:51:37.414: [INFO] Profile: name=Profile 1 path=D:\BHAVANINFO\scratch\edge_bot_profile\Default lastActive=null
+2026-09-26 12:51:37.414: [INFO] LastUsedProfileDir: D:\BHAVANINFO\scratch\edge_bot_profile\Default
+2026-09-26 12:51:37.414: [INFO] VisibilityChanged: 0
+2026-09-26 12:51:37.443: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.445: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.446: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.448: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.450: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.451: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.455: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.457: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.458: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.459: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:37.471: [INFO] BookmarkNodeAdded, ABU: 0
+2026-09-26 12:51:37.471: [INFO] BookmarkNodeAdded, ABU: 0
+2026-09-26 12:51:37.471: [INFO] BookmarkNodeAdded, ABU: 0
+2026-09-26 12:51:37.471: [INFO] OnDoneLoading sync enabled: 0
+2026-09-26 12:51:37.471: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-26 12:51:37.471: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-26 12:51:37.471: [INFO] BookmarksSnapshot Startup total=3 bar=3 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-26 12:51:37.474: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:41.212: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-09-26 12:51:41.217: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-09-26 12:51:41.223: [INFO] Primary account changed.
+2026-09-26 12:51:41.223: [INFO] OnPrimaryAccountChanged PrimaryAccountChangeEvent::Type::kSet
+2026-09-26 12:51:41.239: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-09-26 12:51:41.259: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-09-26 12:51:51.587: [INFO] BookmarkNodeAdded, ABU: 0
+2026-09-26 12:51:53.127: [INFO] Sync initialization duration: 11767ms
+2026-09-26 12:52:22.628: [INFO] CurrentProfilePath: D:\BHAVANINFO\scratch\edge_bot_profile\Default
+2026-09-26 12:52:22.628: [INFO] Profiles total count: 1
+2026-09-26 12:52:22.628: [INFO] Profile: name=Personal path=D:\BHAVANINFO\scratch\edge_bot_profile\Default lastActive=2026-09-26T12:51:37.438Z
+2026-09-26 12:52:22.628: [INFO] LastUsedProfileDir: D:\BHAVANINFO\scratch\edge_bot_profile\Default
+2026-09-26 12:52:22.628: [INFO] MostRecentlyActiveProfile: name=Personal path=D:\BHAVANINFO\scratch\edge_bot_profile\Default lastActive=2026-09-26T12:51:37.438Z
+2026-09-26 12:52:22.628: [INFO] VisibilityChanged: 0
+2026-09-26 12:52:22.662: [INFO] OnDoneLoading sync enabled: 1
+2026-09-26 12:52:22.662: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-09-26 12:52:22.662: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-09-26 12:52:22.662: [INFO] BookmarksSnapshot Startup total=4 bar=4 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-09-26 12:52:23.489: [INFO] Sync initialization duration: 41ms

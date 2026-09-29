@@ -1,0 +1,5 @@
+2026/09/26-17:44:50.475 6130 Creating DB D:\BHAVANINFO\scratch\edge_banner_profile\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/09/26-17:44:50.489 6130 Reusing MANIFEST D:\BHAVANINFO\scratch\edge_banner_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/09/26-17:44:51.492 7c8 Level-0 table #5: started
+2026/09/26-17:44:51.498 7c8 Level-0 table #5: 683273 bytes OK
+2026/09/26-17:44:51.501 7c8 Delete type=0 #3

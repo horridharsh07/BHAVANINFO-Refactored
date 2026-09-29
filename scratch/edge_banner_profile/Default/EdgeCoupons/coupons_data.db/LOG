@@ -1,0 +1,6 @@
+2026/09/26-18:22:55.528 8d8 Reusing MANIFEST D:\BHAVANINFO\scratch\edge_banner_profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/09/26-18:22:55.529 8d8 Recovering log #4
+2026/09/26-18:22:55.529 8d8 Reusing old log D:\BHAVANINFO\scratch\edge_banner_profile\Default\EdgeCoupons/coupons_data.db/000004.log 
+2026/09/26-18:22:55.573 61fc Level-0 table #8: started
+2026/09/26-18:22:55.578 61fc Level-0 table #8: 683444 bytes OK
+2026/09/26-18:22:55.586 61fc Delete type=0 #4
